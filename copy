@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+cp configuration.nix /etc/nixos/
+chown root:root /etc/nixos/configuration.nix
