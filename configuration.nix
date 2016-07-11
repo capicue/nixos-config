@@ -20,20 +20,34 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
+    ack
     chromium
-    dropbox-cli
-    dmenu
+    coq
+    (
+      emacsWithPackages (
+        with emacsPackages;
+        [
+          proofgeneral
+        ]
+      )
+    )
     git
-    gnupg
-    haskellPackages.xmonad
-    pass
-    pinentry
+    (
+      haskellPackages.ghcWithHoogle (pkgs:
+        [
+          pkgs.cabal-install
+          pkgs.ghc-mod
+          pkgs.hscolour
+          pkgs.pretty-show
+        ]
+      )
+    )
+    parcellite
     rcm
-    ruby_2_2_2
-    rxvt_unicode
+    tmux
     vim
-    vimPlugins.vim-nix
     wget
+    xclip
     zsh
   ];
 
@@ -45,13 +59,16 @@
   };
 
   networking = {
-    hostname = "nixos";
+    hostName = "nixos";
     wireless.enable = true;
   };
 
   nixpkgs.config.allowUnfree = true;
 
-  programs.zsh.enable = true;
+  services.locate = {
+    enable = true;
+    interval = "1m";
+  };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
@@ -59,30 +76,15 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  services.virtualbox.enable = true;
-
   # Enable the X11 windowing system.
   services.xserver = {
-    autorun = true;
-    desktopManager = {
-      default = "none";
-      xterm.enable = false;
-    };
+    desktopManager.kde4.enable = true;
     displayManager = {
+      kdm.enable = true;
       sessionCommands = "xrdb -merge /home/capicue/.XResources";
-      slim = {
-        enable = true;
-        defaultUser = "capicue";
-      };
     };
     enable = true;
     layout = "us";
-    windowManager = {
-      default = "xmonad";
-      xmonad = {
-        enable = true;
-      };
-    };
     xkbOptions = "eurosign:e";
     xkbVariant = "dvorak";
   };
