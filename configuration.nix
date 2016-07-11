@@ -47,6 +47,8 @@
     rcm
     tmux
     vim
+    vimPlugins.ghc-mod-vim
+    vimPlugins.vimproc
     wget
     xclip
     zsh
